@@ -1,6 +1,7 @@
 package com.sparta.heartvera.domain.user.entity;
 
 import com.sparta.heartvera.common.Timestamped;
+import com.sparta.heartvera.domain.auth.dto.SignupRequestDto;
 import com.sparta.heartvera.domain.follow.entity.Follow;
 import com.sparta.heartvera.domain.user.dto.UserRequestDto;
 import jakarta.persistence.CascadeType;
@@ -71,7 +72,18 @@ public class User extends Timestamped {
   @OneToMany(mappedBy = "fromUser", fetch = FetchType.LAZY)
   private List<Follow> followings;
 
-  public void updateUser(UserRequestDto requestDto) {
+    public static User toEntity(SignupRequestDto request, UserRoleEnum role, String password) {
+      return User.builder()
+              .userId(request.getUserId())
+              .userPassword(password)
+              .userName(request.getUserName())
+              .userEmail(request.getEmail())
+              .description(request.getDescription())
+              .authority(role)
+              .build();
+    }
+
+    public void updateUser(UserRequestDto requestDto) {
     this.userName = requestDto.getUserName();
     this.description = requestDto.getDescription();
   }

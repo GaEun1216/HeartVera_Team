@@ -2,6 +2,7 @@ package com.sparta.heartvera.domain.user.service;
 
 import com.sparta.heartvera.common.exception.CustomException;
 import com.sparta.heartvera.common.exception.ErrorCode;
+import com.sparta.heartvera.domain.auth.dto.SignupRequestDto;
 import com.sparta.heartvera.domain.user.dto.UserPwRequestDto;
 import com.sparta.heartvera.domain.user.dto.UserRequestDto;
 import com.sparta.heartvera.domain.user.dto.UserResponseDto;
@@ -79,18 +80,9 @@ public class UserService {
     }
 
     @Transactional
-    public User createUser(String userId, String userName,
-                           String password, String email,
-                           String description, UserRoleEnum role) {
+    public User createUser(SignupRequestDto request, UserRoleEnum role, String pw) {
         // 유저 Entity 생성
-        User user = User.builder()
-                .userId(userId)
-                .userName(userName)
-                .userPassword(password)
-                .userEmail(email)
-                .description(description)
-                .authority(role)
-                .build();
+        User user = User.toEntity(request,role, pw);
 
         // 유저 DB 생성
         userRepository.save(user);
@@ -116,10 +108,11 @@ public class UserService {
         );
     }
 
-  public List<User> findAllUser() {
-    return userRepository.findAll();
-  };
-    public void findByUserId(String userName) {
+    public List<User> findAllUser() {
+        return userRepository.findAll();
+    }
+
+    public void checkDulicateUserId(String userName) {
         Optional<User> existingUser = userRepository.findByUserId(userName);
         if (existingUser.isPresent()) {
             throw new CustomException(USER_NOT_UNIQUE);

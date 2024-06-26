@@ -30,20 +30,17 @@ public class AuthService {
 
     public SignupResponseDto signup(SignupRequestDto request) {
         String userId = request.getUserId();
-        String userName = request.getUserName();
-        String password = encodePassword(request.getPassword());
-        String email = request.getEmail();
-        String description = request.getDescription();
         String adminPassword = request.getAdminPassword();
+        String pw = passwordEncoder.encode(request.getPassword());
 
         // 회원 아이디 중복 확인
-        userService.findByUserId(userId);
+        userService.checkDulicateUserId(userId);
 
         // 사용자 ROLE 기본 USER로 설정
         UserRoleEnum authority = determineUserRole(adminPassword);
 
         // 사용자 등록
-        User user = userService.createUser(userId, userName, password, email, description, authority); // user service
+        User user = userService.createUser(request, authority, pw); // user service
 
         return new SignupResponseDto(user);
     }
