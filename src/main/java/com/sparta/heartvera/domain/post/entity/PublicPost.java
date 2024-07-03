@@ -1,11 +1,14 @@
 package com.sparta.heartvera.domain.post.entity;
 
 import com.sparta.heartvera.common.Timestamped;
+import com.sparta.heartvera.domain.like.entity.Like;
 import com.sparta.heartvera.domain.post.dto.PostRequestDto;
 import com.sparta.heartvera.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -14,6 +17,7 @@ import lombok.NoArgsConstructor;
 public class PublicPost extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "pubpost_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -25,6 +29,9 @@ public class PublicPost extends Timestamped {
 
     @Column(nullable = false)
     private String content;
+
+    @OneToMany(mappedBy = "publicPost", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Like> likes;
 
     public PublicPost(PostRequestDto requestDto, User user) {
         this.title = requestDto.getTitle();
