@@ -1,6 +1,10 @@
 package com.sparta.heartvera.domain.like.entity;
 
 import com.sparta.heartvera.common.Timestamped;
+import com.sparta.heartvera.domain.comment.entity.Comment;
+import com.sparta.heartvera.domain.post.entity.Post;
+import com.sparta.heartvera.domain.post.entity.PublicPost;
+import com.sparta.heartvera.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -19,23 +23,31 @@ public class Like extends Timestamped {
     @Column(name = "like_id")
     private Long likeId;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "comment_id", nullable = true) // null 허용
+    private Comment comment;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id", nullable = true) // null 허용
+    private Post post;
 
-    @Column(name = "content_id", nullable = false)
-    private Long contentId;
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pubpost_id")
+    private PublicPost publicPost;
 
     @Column(name = "content_type", nullable = false)
     @Enumerated(value = EnumType.STRING)
     private LikeEnum contentType;
 
-
-    public Like(Long userId, Long contentId, LikeEnum contentType) {
-        this.userId = userId;
-        this.contentId = contentId;
+    public Like(User user, Post post, PublicPost publicPost, Comment comment, LikeEnum contentType) {
+        this.user = user;
+        this.post = post;
+        this.comment = comment;
+        this.publicPost = publicPost;
         this.contentType = contentType;
     }
 }

@@ -2,6 +2,7 @@ package com.sparta.heartvera.domain.post.entity;
 
 import com.sparta.heartvera.common.Timestamped;
 import com.sparta.heartvera.domain.comment.entity.Comment;
+import com.sparta.heartvera.domain.like.entity.Like;
 import com.sparta.heartvera.domain.post.dto.PostRequestDto;
 import com.sparta.heartvera.domain.user.entity.User;
 import jakarta.persistence.*;
@@ -19,7 +20,7 @@ public class Post extends Timestamped {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userId", nullable = false)
+    @JoinColumn(name = "user_seq", nullable = false)
     private User user;
 
     @Column(nullable = false)
@@ -30,6 +31,9 @@ public class Post extends Timestamped {
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Like> likes;
 
     public Post(PostRequestDto requestDto, User user) {
         this.title = requestDto.getTitle();

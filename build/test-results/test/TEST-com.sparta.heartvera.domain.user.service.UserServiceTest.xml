@@ -1,9 +1,78 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.sparta.heartvera.domain.user.service.UserServiceTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-06-24T04:32:41" hostname="GAEUN" time="1.495">
+<testsuite name="com.sparta.heartvera.domain.user.service.UserServiceTest" tests="6" skipped="0" failures="5" errors="0" timestamp="2024-07-03T01:35:04" hostname="GAEUN" time="0.314">
   <properties/>
-  <testcase name="현재 비밀번호 불일치" classname="com.sparta.heartvera.domain.user.service.UserServiceTest" time="1.495"/>
-  <system-out><![CDATA[13:32:43.390 [Test worker] INFO CustomException::  -- ExceptionMethod: com.sparta.heartvera.domain.user.service.UserService.updatePassword
-13:32:43.403 [Test worker] INFO CustomException::  -- ErrorCode: 현재 비밀번호와 사용자의 비밀번호가 일치하지 않습니다.
+  <testcase name="변경하려는 비밀번호와 동일한 비밀번호" classname="com.sparta.heartvera.domain.user.service.UserServiceTest" time="0.253"/>
+  <testcase name="최근에 사용한 비밀번호와 동일한 경우" classname="com.sparta.heartvera.domain.user.service.UserServiceTest" time="0.014">
+    <failure message="org.opentest4j.AssertionFailedError: expected: &lt;RECENT_PASSWORD_MATCH&gt; but was: &lt;SAME_NEW_PASSWORD&gt;" type="org.opentest4j.AssertionFailedError">org.opentest4j.AssertionFailedError: expected: &lt;RECENT_PASSWORD_MATCH&gt; but was: &lt;SAME_NEW_PASSWORD&gt;
+	at app//org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+	at app//org.junit.jupiter.api.AssertionFailureBuilder.buildAndThrow(AssertionFailureBuilder.java:132)
+	at app//org.junit.jupiter.api.AssertEquals.failNotEqual(AssertEquals.java:197)
+	at app//org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:182)
+	at app//org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:177)
+	at app//org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:1145)
+	at app//com.sparta.heartvera.domain.user.service.UserServiceTest.updatePassword_Fail_RecentSamePassword(UserServiceTest.java:187)
+	at java.base@17.0.11/java.lang.reflect.Method.invoke(Method.java:568)
+	at java.base@17.0.11/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at java.base@17.0.11/java.util.ArrayList.forEach(ArrayList.java:1511)
+</failure>
+  </testcase>
+  <testcase name="비밀번호 변경 성공" classname="com.sparta.heartvera.domain.user.service.UserServiceTest" time="0.026">
+    <failure message="Wanted but not invoked:&#10;passwordHistoryRepository.save(&#10;    &lt;any com.sparta.heartvera.domain.user.entity.PasswordHistory&gt;&#10;);&#10;-&gt; at com.sparta.heartvera.domain.user.service.UserServiceTest.updatePassword_Success(UserServiceTest.java:118)&#10;Actually, there were zero interactions with this mock.&#10;" type="org.mockito.exceptions.verification.WantedButNotInvoked">Wanted but not invoked:
+passwordHistoryRepository.save(
+    &lt;any com.sparta.heartvera.domain.user.entity.PasswordHistory&gt;
+);
+-&gt; at com.sparta.heartvera.domain.user.service.UserServiceTest.updatePassword_Success(UserServiceTest.java:118)
+Actually, there were zero interactions with this mock.
+
+	at app//com.sparta.heartvera.domain.user.service.UserServiceTest.updatePassword_Success(UserServiceTest.java:118)
+	at java.base@17.0.11/java.lang.reflect.Method.invoke(Method.java:568)
+	at java.base@17.0.11/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at java.base@17.0.11/java.util.ArrayList.forEach(ArrayList.java:1511)
+</failure>
+  </testcase>
+  <testcase name="프로필 수정" classname="com.sparta.heartvera.domain.user.service.UserServiceTest" time="0.014">
+    <failure message="org.mockito.exceptions.misusing.UnnecessaryStubbingException: &#10;Unnecessary stubbings detected.&#10;Clean &amp; maintainable test code requires zero unnecessary code.&#10;Following stubbings are unnecessary (click to navigate to relevant line of code):&#10;  1. -&gt; at com.sparta.heartvera.domain.user.service.UserServiceTest.updateUser(UserServiceTest.java:85)&#10;Please remove unnecessary stubbings or use 'lenient' strictness. More info: javadoc for UnnecessaryStubbingException class." type="org.mockito.exceptions.misusing.UnnecessaryStubbingException">org.mockito.exceptions.misusing.UnnecessaryStubbingException: 
+Unnecessary stubbings detected.
+Clean &amp; maintainable test code requires zero unnecessary code.
+Following stubbings are unnecessary (click to navigate to relevant line of code):
+  1. -&gt; at com.sparta.heartvera.domain.user.service.UserServiceTest.updateUser(UserServiceTest.java:85)
+Please remove unnecessary stubbings or use 'lenient' strictness. More info: javadoc for UnnecessaryStubbingException class.
+	at app//org.mockito.junit.jupiter.MockitoExtension.afterEach(MockitoExtension.java:197)
+	at java.base@17.0.11/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at java.base@17.0.11/java.util.ArrayList.forEach(ArrayList.java:1511)
+</failure>
+  </testcase>
+  <testcase name="프로필 조회" classname="com.sparta.heartvera.domain.user.service.UserServiceTest" time="0.003">
+    <failure message="org.mockito.exceptions.misusing.UnnecessaryStubbingException: &#10;Unnecessary stubbings detected.&#10;Clean &amp; maintainable test code requires zero unnecessary code.&#10;Following stubbings are unnecessary (click to navigate to relevant line of code):&#10;  1. -&gt; at com.sparta.heartvera.domain.user.service.UserServiceTest.getUser(UserServiceTest.java:71)&#10;Please remove unnecessary stubbings or use 'lenient' strictness. More info: javadoc for UnnecessaryStubbingException class." type="org.mockito.exceptions.misusing.UnnecessaryStubbingException">org.mockito.exceptions.misusing.UnnecessaryStubbingException: 
+Unnecessary stubbings detected.
+Clean &amp; maintainable test code requires zero unnecessary code.
+Following stubbings are unnecessary (click to navigate to relevant line of code):
+  1. -&gt; at com.sparta.heartvera.domain.user.service.UserServiceTest.getUser(UserServiceTest.java:71)
+Please remove unnecessary stubbings or use 'lenient' strictness. More info: javadoc for UnnecessaryStubbingException class.
+	at app//org.mockito.junit.jupiter.MockitoExtension.afterEach(MockitoExtension.java:197)
+	at java.base@17.0.11/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at java.base@17.0.11/java.util.ArrayList.forEach(ArrayList.java:1511)
+</failure>
+  </testcase>
+  <testcase name="현재 비밀번호 불일치" classname="com.sparta.heartvera.domain.user.service.UserServiceTest" time="0.004">
+    <failure message="org.mockito.exceptions.misusing.UnnecessaryStubbingException: &#10;Unnecessary stubbings detected.&#10;Clean &amp; maintainable test code requires zero unnecessary code.&#10;Following stubbings are unnecessary (click to navigate to relevant line of code):&#10;  1. -&gt; at com.sparta.heartvera.domain.user.service.UserServiceTest.updatePassword_Fail_NotMatchCurrentPassword(UserServiceTest.java:127)&#10;  2. -&gt; at com.sparta.heartvera.domain.user.service.UserServiceTest.updatePassword_Fail_NotMatchCurrentPassword(UserServiceTest.java:132)&#10;Please remove unnecessary stubbings or use 'lenient' strictness. More info: javadoc for UnnecessaryStubbingException class." type="org.mockito.exceptions.misusing.UnnecessaryStubbingException">org.mockito.exceptions.misusing.UnnecessaryStubbingException: 
+Unnecessary stubbings detected.
+Clean &amp; maintainable test code requires zero unnecessary code.
+Following stubbings are unnecessary (click to navigate to relevant line of code):
+  1. -&gt; at com.sparta.heartvera.domain.user.service.UserServiceTest.updatePassword_Fail_NotMatchCurrentPassword(UserServiceTest.java:127)
+  2. -&gt; at com.sparta.heartvera.domain.user.service.UserServiceTest.updatePassword_Fail_NotMatchCurrentPassword(UserServiceTest.java:132)
+Please remove unnecessary stubbings or use 'lenient' strictness. More info: javadoc for UnnecessaryStubbingException class.
+	at app//org.mockito.junit.jupiter.MockitoExtension.afterEach(MockitoExtension.java:197)
+	at java.base@17.0.11/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at java.base@17.0.11/java.util.ArrayList.forEach(ArrayList.java:1511)
+</failure>
+  </testcase>
+  <system-out><![CDATA[2024-07-03T10:35:05.133+09:00  INFO 17976 --- [igeo-mubwotna] [    Test worker] CustomException::                        : ExceptionMethod: com.sparta.heartvera.domain.user.service.UserService.updatePassword
+2024-07-03T10:35:05.133+09:00  INFO 17976 --- [igeo-mubwotna] [    Test worker] CustomException::                        : ErrorCode: 동일한 비밀번호로는 변경할 수 없습니다.
+2024-07-03T10:35:05.146+09:00  INFO 17976 --- [igeo-mubwotna] [    Test worker] CustomException::                        : ExceptionMethod: com.sparta.heartvera.domain.user.service.UserService.updatePassword
+2024-07-03T10:35:05.147+09:00  INFO 17976 --- [igeo-mubwotna] [    Test worker] CustomException::                        : ErrorCode: 동일한 비밀번호로는 변경할 수 없습니다.
+2024-07-03T10:35:05.201+09:00  INFO 17976 --- [igeo-mubwotna] [    Test worker] CustomException::                        : ExceptionMethod: com.sparta.heartvera.domain.user.service.UserService.updatePassword
+2024-07-03T10:35:05.201+09:00  INFO 17976 --- [igeo-mubwotna] [    Test worker] CustomException::                        : ErrorCode: 현재 비밀번호와 사용자의 비밀번호가 일치하지 않습니다.
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

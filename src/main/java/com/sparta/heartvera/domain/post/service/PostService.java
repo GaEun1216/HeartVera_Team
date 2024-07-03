@@ -64,12 +64,13 @@ public class PostService {
     }
 
     // 좋아요 유효성 검사
-    public void validatePostLike(Long userId, Long postId) {
+    public Post validatePostLike(User user, Long postId) {
         Post post = postRepository.findById(postId).orElseThrow(() ->
                 new CustomException(ErrorCode.POST_NOT_FOUND));
-        if (post.getUser().getUserSeq().equals(userId)) {
+        if (post.getUser().getUserSeq().equals(user.getUserSeq())) {
             throw new CustomException(ErrorCode.POST_SAME_USER);
         }
+        return post;
     }
 
     public Post findById(Long postId) {
