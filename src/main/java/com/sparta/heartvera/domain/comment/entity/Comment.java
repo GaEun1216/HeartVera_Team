@@ -9,6 +9,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -39,6 +40,7 @@ public class Comment extends Timestamped {
     this.contents = requestDto.getContents();
     this.post = post;
     this.user = user;
+    this.likes = new ArrayList<>();
   }
 
   public void updateComment(CommentRequestDto requestDto){

@@ -6,6 +6,8 @@ import com.sparta.heartvera.domain.like.entity.Like;
 import com.sparta.heartvera.domain.post.dto.PostRequestDto;
 import com.sparta.heartvera.domain.user.entity.User;
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,6 +41,7 @@ public class Post extends Timestamped {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
         this.user = user;
+        this.likes = new ArrayList<>();
     }
 
     public void update(PostRequestDto requestDto) {

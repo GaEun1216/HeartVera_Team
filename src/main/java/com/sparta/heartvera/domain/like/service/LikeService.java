@@ -1,16 +1,20 @@
 package com.sparta.heartvera.domain.like.service;
 
+import com.sparta.heartvera.domain.comment.dto.CommentResponseDto;
 import com.sparta.heartvera.domain.comment.entity.Comment;
 import com.sparta.heartvera.domain.comment.service.CommentService;
 import com.sparta.heartvera.domain.like.entity.Like;
 import com.sparta.heartvera.domain.like.entity.LikeEnum;
 import com.sparta.heartvera.domain.like.repository.LikeRepository;
+import com.sparta.heartvera.domain.post.dto.PostResponseDto;
+import com.sparta.heartvera.domain.post.dto.PublicPostResponseDto;
 import com.sparta.heartvera.domain.post.entity.Post;
 import com.sparta.heartvera.domain.post.entity.PublicPost;
 import com.sparta.heartvera.domain.post.service.PostService;
 import com.sparta.heartvera.domain.post.service.PublicPostService;
 import com.sparta.heartvera.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -80,4 +84,18 @@ public class LikeService {
         }
     }
 
+    public Page<PostResponseDto> getLikedPostsByUser(User user,int page, int size) {
+        Page<Post> postList = likeRepository.LikesPost(user.getUserSeq(), page, size);
+        return postList.map(PostResponseDto::new);
+    }
+
+    public Page<PublicPostResponseDto> getLikedPubPostsByUser(User user, int page, int size) {
+        Page<PublicPost> postList = likeRepository.LikesPubPost(user.getUserSeq(), page, size);
+        return postList.map(PublicPostResponseDto::new);
+    }
+
+    public Page<CommentResponseDto> getLikedCommentsByUser(User user, int page, int size) {
+        Page<Comment> commentList = likeRepository.LikesComment(user.getUserSeq(), page, size);
+        return commentList.map(CommentResponseDto::new);
+    }
 }

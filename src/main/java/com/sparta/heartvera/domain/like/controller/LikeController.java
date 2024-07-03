@@ -1,15 +1,22 @@
 package com.sparta.heartvera.domain.like.controller;
 
+import com.sparta.heartvera.domain.comment.dto.CommentResponseDto;
 import com.sparta.heartvera.domain.like.dto.LikeCountResponseDto;
 import com.sparta.heartvera.domain.like.entity.LikeEnum;
 import com.sparta.heartvera.domain.like.service.LikeService;
+import com.sparta.heartvera.domain.post.dto.PostResponseDto;
+import com.sparta.heartvera.domain.post.dto.PublicPostResponseDto;
 import com.sparta.heartvera.security.service.UserDetailsImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -39,5 +46,34 @@ public class LikeController {
     public ResponseEntity<String> togglePublicPostLike(@PathVariable(name = "postId") long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return likeService.togglePublicPostLike(userDetails.getUser(), postId);
     }
+
+    // 내가 좋아요 누른 게시글 확인
+    @Operation(summary = "내가 좋아요 누른 게시글 목록",description = "내가 좋아요 누른 게시글의 목록을 확인합니다.")
+    @GetMapping("/posts/like")
+    public ResponseEntity<Page<PostResponseDto>> getLikedPosts(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                               @RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "size", defaultValue = "5") int size) {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                likeService.getLikedPostsByUser(userDetails.getUser(),page,size));
+    }
+
+    // 내가 좋아요 누른 공개게시글 확인
+    @Operation(summary = "내가 좋아요 누른 공개 게시글 목록",description = "내가 좋아요 누른 공개 게시글의 목록을 확인합니다.")
+    @GetMapping("/pubposts/like")
+    public ResponseEntity<Page<PublicPostResponseDto>> getLikedPubPosts(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                                        @RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "size", defaultValue = "5") int size) {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                likeService.getLikedPubPostsByUser(userDetails.getUser(),page,size));
+    }
+
+
+    // 내가 좋아요 누른 댓글 확인
+    @Operation(summary = "내가 좋아요 누른 댓글 목록",description = "내가 좋아요 누른 댓글의 목록을 확인합니다.")
+    @GetMapping("/comments/like")
+    public ResponseEntity<Page<CommentResponseDto>> getLikedComments(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                                     @RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "size", defaultValue = "5") int size) {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                likeService.getLikedCommentsByUser(userDetails.getUser(),page,size));
+    }
+
 
 }
