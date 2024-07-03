@@ -13,6 +13,7 @@ public class PublicCommentResponseDto {
     private String contents;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
+    private Long likes;
 
     public PublicCommentResponseDto(Comment comment) {
         this.id = comment.getId();
@@ -21,5 +22,6 @@ public class PublicCommentResponseDto {
         this.contents = comment.getContents();
         this.createdAt = comment.getCreatedAt();
         this.modifiedAt = comment.getModifiedAt();
+        this.likes = comment.getLikes().stream().count();
     }
 }
