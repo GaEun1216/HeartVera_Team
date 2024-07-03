@@ -95,12 +95,21 @@ public class LikeRepositoryImpl implements LikeRepositoryCustom {
         return new PageImpl<>(commentList, pageable, total);
     }
 
-    /*
-- [ ]  **🆕 프로필에 내가 좋아요한 게시글 수/댓글 수 응답필드 추가하기**
-    - **프로필 조회응답에 필드 추가**
-        - 프로필 조회시 응답필드에 내가 좋아요한 게시글 수 필드를 추가합니다.
-        - 프로필 조회시 응답필드에 내가 좋아요한 댓글 수 필드를 추가합니다.
-     */
+    @Override
+    public int GetLikesCount(Long userId, LikeEnum type) {
+        /*
+        SELECT COUNT(*) FROM LIKE
+        WHERE LIKE.TYPE = TYPE
+        AND LIKE.USERID = USERID;
+         */
+        QLike like = QLike.like;
+        Long count = jpaQueryFactory.select(like.count())
+                .from(like)
+                .where(like.user.userSeq.eq(userId)
+                        .and(like.contentType.eq(type)))
+                .fetchOne();
+        return count.intValue();
+    }
 
 
 }
