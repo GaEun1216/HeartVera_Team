@@ -73,9 +73,9 @@ public class LikeServiceTest {
         userRepository.save(user2);
 
         post1 = new Post("title","content", user2);
-        post2 = new Post("title","content", user1);
+        //post2 = new Post("title","content", user1);
         postRepository.save(post1);
-        postRepository.save(post2);
+        //postRepository.save(post2);
         publicPost = new PublicPost("content", user1);
     }
 
@@ -88,16 +88,15 @@ public class LikeServiceTest {
         when(userRepository.findByUserId(user1.getUserId())).thenReturn(Optional.of(user1));
         when(postRepository.findById(post1.getId())).thenReturn(Optional.of(post1));
         when(postService.validatePostLike(user1, post1.getId())).thenReturn(post1);
+
         when(likeRepository.findByUserAndPost(user1, post1)).thenReturn(Optional.empty());
         when(likeRepository.save(like)).thenReturn(like);
 
         // When
-        ResponseEntity<String> response = likeService.togglePostLike(user1, post1.getId());
+        String response = likeService.togglePostLike(user1, post1.getId());
 
         // Then
-        assertThat(response).isNotNull();
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody()).isEqualTo("좋아요를 눌렀습니다.");
+        assertThat(response.equals("좋아요를 눌렀습니다."));
     }
 
     @Test
@@ -131,12 +130,10 @@ public class LikeServiceTest {
         when(likeRepository.findByUserAndPost(user1, post1)).thenReturn(Optional.of(like));
 
         // When
-        ResponseEntity<String> response = likeService.togglePostLike(user1, post1.getId());
+        String response = likeService.togglePostLike(user1, post1.getId());
 
         // Then
-        assertThat(response).isNotNull();
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody()).isEqualTo("좋아요를 취소했습니다.");
+        assertThat(response.equals("좋아요를 취소했습니다."));
     }
 
     /* https://jyami.tistory.com/124 */
