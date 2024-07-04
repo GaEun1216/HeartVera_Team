@@ -15,6 +15,7 @@ import com.sparta.heartvera.domain.post.service.PublicPostService;
 import com.sparta.heartvera.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,9 +32,12 @@ public class LikeService {
     private final CommentService commentService;
     private final PublicPostService publicPostService;
 
+    private final String LIKE_SUCCESS_MESSAGE = "좋아요를 눌렀습니다.";
+    private final String UNLIKE_SUCCESS_MESSAGE = "좋아요를 취소했습니다.";
+
     // 익명 게시물별 좋아요 toggle 기능
     @Transactional
-    public ResponseEntity<String> togglePostLike(User user, Long postId) {
+    public String togglePostLike(User user, Long postId) {
         Post post = postService.validatePostLike(user, postId);
         Optional<Like> likeOptional = likeRepository.findByUserAndPost(user,post);
         if (likeOptional.isPresent()) {
@@ -41,19 +45,19 @@ public class LikeService {
             post.getLikes().remove(like);
             postService.decreasePostLike(postId);
             likeRepository.delete(like);
-            return ResponseEntity.ok("좋아요를 취소했습니다.");
+            return UNLIKE_SUCCESS_MESSAGE;
         } else {
             Like like = new Like(user, post,null,null, LikeEnum.POST);
             post.getLikes().add(like);
             postService.increasePostLike(postId);
             likeRepository.save(like);
-            return ResponseEntity.ok("좋아요를 눌렀습니다.");
+            return LIKE_SUCCESS_MESSAGE;
         }
     }
 
     // 공개 게시물별 좋아요 toggle 기능
     @Transactional
-    public ResponseEntity<String> togglePublicPostLike(User user, Long postId) {
+    public String togglePublicPostLike(User user, Long postId) {
         PublicPost post = publicPostService.validatePostLike(user, postId);
         Optional<Like> likeOptional = likeRepository.findByUserAndPublicPost(user,post);
         if (likeOptional.isPresent()) {
@@ -61,19 +65,19 @@ public class LikeService {
             post.getLikes().remove(like);
             publicPostService.decreasePostLike(postId);
             likeRepository.delete(like);
-            return ResponseEntity.ok("좋아요를 취소했습니다.");
+            return UNLIKE_SUCCESS_MESSAGE;
         } else {
             Like like = new Like(user, null, post,null, LikeEnum.PUBPOST);
             post.getLikes().add(like);
             publicPostService.increasePostLike(postId);
             likeRepository.save(like);
-            return ResponseEntity.ok("좋아요를 눌렀습니다.");
+            return LIKE_SUCCESS_MESSAGE;
         }
     }
 
     // 댓글별 좋아요 toggle 기능
     @Transactional
-    public ResponseEntity<String> toggleCommentLike(User user, Long commentId) {
+    public String toggleCommentLike(User user, Long commentId) {
         Comment comment = commentService.validateCommentLike(user, commentId);
         Optional<Like> likeOptional = likeRepository.findByUserAndComment(user,comment);
         if (likeOptional.isPresent()) {
@@ -81,28 +85,28 @@ public class LikeService {
             comment.getLikes().remove(like);
             commentService.decreaseCommentLike(commentId);
             likeRepository.delete(like);
-            return ResponseEntity.ok("좋아요를 취소했습니다.");
+            return UNLIKE_SUCCESS_MESSAGE;
         } else {
             Like like = new Like(user, null, null,comment, LikeEnum.COMMENT);
             comment.getLikes().add(like);
             commentService.increaseCommentLike(commentId);
             likeRepository.save(like);
-            return ResponseEntity.ok("좋아요를 눌렀습니다.");
+            return LIKE_SUCCESS_MESSAGE;
         }
     }
 
-    public Page<PostResponseDto> getLikedPostsByUser(User user, int page, int size) {
-        Page<Post> postList = likeRepository.LikesPost(user.getUserSeq(), page, size);
+    public Page<PostResponseDto> getLikedPostsByUser(User user, Pageable pageable) {
+        Page<Post> postList = likeRepository.LikesPost(user.getUserSeq(), pageable);
         return postList.map(PostResponseDto::new);
     }
 
-    public Page<PublicPostResponseDto> getLikedPubPostsByUser(User user, int page, int size) {
-        Page<PublicPost> postList = likeRepository.LikesPubPost(user.getUserSeq(), page, size);
+    public Page<PublicPostResponseDto> getLikedPubPostsByUser(User user, Pageable pageable) {
+        Page<PublicPost> postList = likeRepository.LikesPubPost(user.getUserSeq(), pageable);
         return postList.map(PublicPostResponseDto::new);
     }
 
-    public Page<CommentResponseDto> getLikedCommentsByUser(User user, int page, int size) {
-        Page<Comment> commentList = likeRepository.LikesComment(user.getUserSeq(), page, size);
+    public Page<CommentResponseDto> getLikedCommentsByUser(User user, Pageable pageable) {
+        Page<Comment> commentList = likeRepository.LikesComment(user.getUserSeq(), pageable);
         return commentList.map(CommentResponseDto::new);
     }
 }
