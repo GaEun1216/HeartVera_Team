@@ -11,7 +11,7 @@ public class PublicPostResponseDto {
     String title;
     String content;
     String userName;
-    Long likes;
+    int likeCount;
     LocalDateTime createdAt;
     LocalDateTime modifiedAt;
 
@@ -21,15 +21,6 @@ public class PublicPostResponseDto {
         this.userName = post.getUser().getUserName();
         this.createdAt = post.getCreatedAt();
         this.modifiedAt = post.getModifiedAt();
-        this.likes = post.getLikes().stream().count();
-    }
-
-    public PublicPostResponseDto(Post post) {
-        this.title = post.getTitle();
-        this.content = post.getContent();
-        this.userName = post.getUser().getUserName();
-        this.createdAt = post.getCreatedAt();
-        this.modifiedAt = post.getModifiedAt();
-        this.likes = post.getLikes().stream().count();
+        this.likeCount = post.getLikeCount();
     }
 }

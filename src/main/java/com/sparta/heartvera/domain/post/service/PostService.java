@@ -2,6 +2,7 @@ package com.sparta.heartvera.domain.post.service;
 
 import com.sparta.heartvera.common.exception.CustomException;
 import com.sparta.heartvera.common.exception.ErrorCode;
+import com.sparta.heartvera.domain.comment.entity.Comment;
 import com.sparta.heartvera.domain.post.dto.PostRequestDto;
 import com.sparta.heartvera.domain.post.dto.PostResponseDto;
 import com.sparta.heartvera.domain.post.dto.PublicPostResponseDto;
@@ -73,6 +74,19 @@ public class PostService {
         return post;
     }
 
+    // 좋아요 증감 함수
+    @Transactional
+    public void increasePostLike(Long postId){
+        Post post = findById(postId);
+        post.increaseLike();
+    }
+
+    @Transactional
+    public void decreasePostLike(Long postId){
+        Post post =  findById(postId);
+        post.decreaseLike();
+    }
+
     public Post findById(Long postId) {
         return postRepository.findById(postId).orElseThrow(
                 () -> new CustomException(ErrorCode.POST_NOT_FOUND)
@@ -94,7 +108,7 @@ public class PostService {
             return "먼저 작성하여 소식을 알려보세요!";
         }
 
-        return postList.map(PublicPostResponseDto::new);
+        return postList.map(PostResponseDto::new);
     }
 
     public void delete(Post post) {

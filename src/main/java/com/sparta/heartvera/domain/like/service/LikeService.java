@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -38,11 +39,13 @@ public class LikeService {
         if (likeOptional.isPresent()) {
             Like like = likeOptional.get();
             post.getLikes().remove(like);
+            postService.decreasePostLike(postId);
             likeRepository.delete(like);
             return ResponseEntity.ok("좋아요를 취소했습니다.");
         } else {
             Like like = new Like(user, post,null,null, LikeEnum.POST);
             post.getLikes().add(like);
+            postService.increasePostLike(postId);
             likeRepository.save(like);
             return ResponseEntity.ok("좋아요를 눌렀습니다.");
         }
@@ -56,11 +59,13 @@ public class LikeService {
         if (likeOptional.isPresent()) {
             Like like = likeOptional.get();
             post.getLikes().remove(like);
+            publicPostService.decreasePostLike(postId);
             likeRepository.delete(like);
             return ResponseEntity.ok("좋아요를 취소했습니다.");
         } else {
-            Like like = new Like(user, null, post,null, LikeEnum.POST);
+            Like like = new Like(user, null, post,null, LikeEnum.PUBPOST);
             post.getLikes().add(like);
+            publicPostService.increasePostLike(postId);
             likeRepository.save(like);
             return ResponseEntity.ok("좋아요를 눌렀습니다.");
         }
@@ -74,28 +79,31 @@ public class LikeService {
         if (likeOptional.isPresent()) {
             Like like = likeOptional.get();
             comment.getLikes().remove(like);
+            commentService.decreaseCommentLike(commentId);
             likeRepository.delete(like);
             return ResponseEntity.ok("좋아요를 취소했습니다.");
         } else {
-            Like like = new Like(user, null, null,comment, LikeEnum.POST);
+            Like like = new Like(user, null, null,comment, LikeEnum.COMMENT);
             comment.getLikes().add(like);
+            commentService.increaseCommentLike(commentId);
             likeRepository.save(like);
             return ResponseEntity.ok("좋아요를 눌렀습니다.");
         }
     }
 
-    public Page<PostResponseDto> getLikedPostsByUser(User user,int page, int size) {
-        Page<Post> postList = likeRepository.LikesPost(user.getUserSeq(), page, size);
-        return postList.map(PostResponseDto::new);
+    public List<PostResponseDto> getLikedPostsByUser(User user, int page, int size) {
+        List<Post> postList = likeRepository.LikesPost(user.getUserSeq(), page, size);
+        //return postList.map(PostResponseDto::new);
+        return postList.stream().map(PostResponseDto::new).toList();
     }
 
-    public Page<PublicPostResponseDto> getLikedPubPostsByUser(User user, int page, int size) {
-        Page<PublicPost> postList = likeRepository.LikesPubPost(user.getUserSeq(), page, size);
-        return postList.map(PublicPostResponseDto::new);
+    public List<PublicPostResponseDto> getLikedPubPostsByUser(User user, int page, int size) {
+        List<PublicPost> postList = likeRepository.LikesPubPost(user.getUserSeq(), page, size);
+        return postList.stream().map(PublicPostResponseDto::new).toList();
     }
 
-    public Page<CommentResponseDto> getLikedCommentsByUser(User user, int page, int size) {
-        Page<Comment> commentList = likeRepository.LikesComment(user.getUserSeq(), page, size);
-        return commentList.map(CommentResponseDto::new);
+    public List<CommentResponseDto> getLikedCommentsByUser(User user, int page, int size) {
+        List<Comment> commentList = likeRepository.LikesComment(user.getUserSeq(), page, size);
+        return commentList.stream().map(CommentResponseDto::new).toList();
     }
 }

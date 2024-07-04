@@ -7,6 +7,7 @@ import com.sparta.heartvera.domain.comment.dto.CommentResponseDto;
 import com.sparta.heartvera.domain.comment.dto.PublicCommentResponseDto;
 import com.sparta.heartvera.domain.comment.entity.Comment;
 import com.sparta.heartvera.domain.comment.repository.CommentRepository;
+import com.sparta.heartvera.domain.like.repository.LikeRepository;
 import com.sparta.heartvera.domain.post.entity.Post;
 import com.sparta.heartvera.domain.post.service.PostService;
 import com.sparta.heartvera.domain.user.entity.User;
@@ -22,6 +23,7 @@ import java.util.List;
 public class CommentService {
 
     private final CommentRepository commentRepository;
+    private final LikeRepository likeRepository;
     private final PostService postService;
 
     // 댓글 작성
@@ -64,10 +66,24 @@ public class CommentService {
         commentRepository.delete(comment);
     }
 
+    // 좋아요 증감 함수
+    @Transactional
+    public void increaseCommentLike(Long commentId){
+        Comment comment = findCommentById(commentId);
+        comment.increaseLike();
+    }
+
+    @Transactional
+    public void decreaseCommentLike(Long commentId){
+        Comment comment =  findCommentById(commentId);
+        comment.decreaseLike();
+    }
+
     public Comment findCommentById(Long commentId) {
         return commentRepository.findById(commentId).orElseThrow(() ->
                 new CustomException(ErrorCode.COMMENT_NOT_FOUND));
     }
+
 
     private Post findPostById(Long postId) {
         return postService.findById(postId);
@@ -86,4 +102,5 @@ public class CommentService {
         }
         return comment;
     }
+
 }

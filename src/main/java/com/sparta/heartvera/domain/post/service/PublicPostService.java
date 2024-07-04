@@ -6,6 +6,7 @@ import com.sparta.heartvera.domain.follow.entity.Follow;
 import com.sparta.heartvera.domain.follow.repository.FollowRepository;
 import com.sparta.heartvera.domain.post.dto.PostRequestDto;
 import com.sparta.heartvera.domain.post.dto.PublicPostResponseDto;
+import com.sparta.heartvera.domain.post.entity.Post;
 import com.sparta.heartvera.domain.post.entity.PublicPost;
 import com.sparta.heartvera.domain.post.repository.PublicPostRepository;
 import com.sparta.heartvera.domain.user.entity.User;
@@ -93,6 +94,20 @@ public class PublicPostService {
       return "먼저 관심있는 사람들을 팔로우 해보세요!";
     }
     return publicPostResponseDtos;
+  }
+
+
+  // 좋아요 증감 함수
+  @Transactional
+  public void increasePostLike(Long postId){
+    PublicPost post = findById(postId);
+    post.increaseLike();
+  }
+
+  @Transactional
+  public void decreasePostLike(Long postId){
+    PublicPost post =  findById(postId);
+    post.decreaseLike();
   }
 
   public PublicPost findById(Long postId) {

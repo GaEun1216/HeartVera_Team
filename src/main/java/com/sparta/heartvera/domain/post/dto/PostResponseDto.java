@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 public class PostResponseDto {
     String title;
     String content;
-    Long likes;
+    int likeCount;
     LocalDateTime createdAt;
     LocalDateTime modifiedAt;
 
@@ -18,6 +18,6 @@ public class PostResponseDto {
         this.content = post.getContent();
         this.createdAt = post.getCreatedAt();
         this.modifiedAt = post.getModifiedAt();
-        this.likes = post.getLikes().stream().count();
+        this.likeCount = post.getLikeCount();
     }
 }

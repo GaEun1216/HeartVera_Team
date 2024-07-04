@@ -9,6 +9,8 @@ import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -31,17 +33,29 @@ public class Post extends Timestamped {
     @Column(nullable = false)
     private String content;
 
+    private int likeCount;
+
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Like> likes;
 
+    @Builder
+    public Post(String title, String content, User user) {
+        this.title = title;
+        this.content = content;
+        this.user = user;
+        this.likes = new ArrayList<>();
+        this.likeCount = 0;
+    }
+
     public Post(PostRequestDto requestDto, User user) {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
         this.user = user;
         this.likes = new ArrayList<>();
+        this.likeCount = 0;
     }
 
     public void update(PostRequestDto requestDto) {
@@ -53,4 +67,8 @@ public class Post extends Timestamped {
             this.content = requestDto.getContent();
         }
     }
+
+    public void increaseLike() { this.likeCount++; }
+
+    public void decreaseLike() { this.likeCount--; }
 }

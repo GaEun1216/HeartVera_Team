@@ -22,57 +22,75 @@ public class LikeRepositoryImpl implements LikeRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
 
+//    @Override
+//    public Page<Post> LikesPost(Long userId, int page, int size) {
+//        /*
+//        SELECT *
+//        FROM post AS p
+//                 LEFT JOIN likes AS l ON p.id = l.post_id
+//        WHERE l.user_id = 2 AND
+//              l.content_type = "POST";
+//         */
+//        QPost post = QPost.post;
+//        QLike like = QLike.like;
+//        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+//        Pageable pageable = PageRequest.of(page-1, size, sort);
+//
+//        QueryResults<Post> queryResults = jpaQueryFactory
+//                .selectFrom(post)
+//                .leftJoin(like).on(post.id.eq(like.post.id))
+//                .where(like.user.userSeq.eq(userId)
+//                        .and(like.contentType.eq(LikeEnum.POST)))
+//                .offset(pageable.getOffset())
+//                .limit(pageable.getPageSize())
+//                .fetchResults();
+//
+//        List<Post> postList = queryResults.getResults();
+//        long total = queryResults.getTotal();
+//
+//        return new PageImpl<>(postList, pageable, total);
+//    }
+
     @Override
-    public Page<Post> LikesPost(Long userId, int page, int size) {
-        /*
-        SELECT *
-        FROM post AS p
-                 LEFT JOIN likes AS l ON p.id = l.post_id
-        WHERE l.user_id = 2 AND
-              l.content_type = "POST";
-         */
+    public List<Post> LikesPost(Long userId, int page, int size) {
+
         QPost post = QPost.post;
         QLike like = QLike.like;
-        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
-        Pageable pageable = PageRequest.of(page-1, size, sort);
+        Pageable pageable = PageRequest.of(page-1, size);
 
-        QueryResults<Post> queryResults = jpaQueryFactory
+        List<Post> postList = jpaQueryFactory
                 .selectFrom(post)
-                .leftJoin(like).on(post.id.eq(like.post.id))
+                .leftJoin(like).on(post.id.eq(like.post.id)).fetchJoin()
                 .where(like.user.userSeq.eq(userId)
                         .and(like.contentType.eq(LikeEnum.POST)))
+                .orderBy(post.modifiedAt.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .fetchResults();
+                .fetch();
 
-        List<Post> postList = queryResults.getResults();
-        long total = queryResults.getTotal();
-
-        return new PageImpl<>(postList, pageable, total);
+        return postList;
     }
 
     @Override
-    public Page<PublicPost> LikesPubPost(Long userId, int page, int size) {
+    public List<PublicPost> LikesPubPost(Long userId, int page, int size) {
+
         QPublicPost post = QPublicPost.publicPost;
         QLike like = QLike.like;
-        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
-        Pageable pageable = PageRequest.of(page-1, size, sort);
+        Pageable pageable = PageRequest.of(page-1, size);
 
-        QueryResults<PublicPost> queryResults = jpaQueryFactory
+        List<PublicPost> postList = jpaQueryFactory
                 .selectFrom(post)
-                .leftJoin(like).on(post.id.eq(like.publicPost.id))
+                .leftJoin(like).on(post.id.eq(like.publicPost.id)).fetchJoin()
                 .where(like.user.userSeq.eq(userId)
                         .and(like.contentType.eq(LikeEnum.PUBPOST)))
+                .orderBy(post.modifiedAt.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .fetchResults();
+                .fetch();
 
-        List<PublicPost> postList = queryResults.getResults();
-        long total = queryResults.getTotal();
-
-        return new PageImpl<>(postList, pageable, total);
+        return postList;
     }
-
+    /*
     @Override
     public Page<Comment> LikesComment(Long userId, int page, int size) {
         QComment comment = QComment.comment;
@@ -93,6 +111,57 @@ public class LikeRepositoryImpl implements LikeRepositoryCustom {
         long total = queryResults.getTotal();
 
         return new PageImpl<>(commentList, pageable, total);
+    }*/
+    @Override
+    public List<Comment> LikesComment(Long userId, int page, int size) {
+        QComment comment = QComment.comment;
+        QLike like = QLike.like;
+        Pageable pageable = PageRequest.of(page-1, size);
+
+        List<Comment> commentList = jpaQueryFactory
+                .selectFrom(comment)
+                .leftJoin(like).on(comment.id.eq(like.comment.id))
+                .where(like.user.userSeq.eq(userId)
+                        .and(like.contentType.eq(LikeEnum.COMMENT)))
+                .orderBy(comment.modifiedAt.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        return commentList;
+    }
+
+    @Override
+    public int GetPostLikesCount(Long postId) {
+        QLike like = QLike.like;
+        Long count = jpaQueryFactory.select(like.count())
+                .from(like)
+                .where(like.post.id.eq(postId)
+                        .and(like.contentType.eq(LikeEnum.POST)))
+                .fetchOne();
+        return count.intValue();
+    }
+
+    @Override
+    public int GetPubPostLikesCount(Long postId) {
+        QLike like = QLike.like;
+        Long count = jpaQueryFactory.select(like.count())
+                .from(like)
+                .where(like.publicPost.id.eq(postId)
+                        .and(like.contentType.eq(LikeEnum.PUBPOST)))
+                .fetchOne();
+        return count.intValue();
+    }
+
+    @Override
+    public int GetCommentLikesCount(Long commentId) {
+        QLike like = QLike.like;
+        Long count = jpaQueryFactory.select(like.count())
+                .from(like)
+                .where(like.comment.id.eq(commentId)
+                        .and(like.contentType.eq(LikeEnum.COMMENT)))
+                .fetchOne();
+        return count.intValue();
     }
 
     @Override
@@ -110,6 +179,7 @@ public class LikeRepositoryImpl implements LikeRepositoryCustom {
                 .fetchOne();
         return count.intValue();
     }
+
 
 
 }

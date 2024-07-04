@@ -8,6 +8,7 @@ import lombok.Getter;
 public class CommentResponseDto {
   private Long id;
   private String contents;
+  private int likeCount;
   private LocalDateTime createdAt;
   private LocalDateTime modifiedAt;
 
@@ -16,5 +17,8 @@ public class CommentResponseDto {
     this.contents = comment.getContents();
     this.createdAt = comment.getCreatedAt();
     this.modifiedAt = comment.getModifiedAt();
+    this.likeCount = comment.getLikeCount();
   }
+
+
 }
