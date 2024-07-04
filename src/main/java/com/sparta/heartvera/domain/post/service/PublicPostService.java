@@ -97,8 +97,8 @@ public class PublicPostService {
   }
 
 
-  public Page<PublicPostResponseDto> getFollowedPubPosts(User user, int page, int size, String sortBy){
-    Page<PublicPost> postList = followRepository.getFollowerPostsByUserId(user.getUserSeq(), page, size, sortBy);
+  public Page<PublicPostResponseDto> getFollowedPubPosts(User user,Pageable pageable, String sortBy){
+    Page<PublicPost> postList = followRepository.getFollowerPostsByUserId(user.getUserSeq(), pageable, sortBy);
     return postList.map(PublicPostResponseDto::new);
   }
 

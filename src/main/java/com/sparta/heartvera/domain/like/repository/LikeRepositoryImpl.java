@@ -22,12 +22,10 @@ public class LikeRepositoryImpl implements LikeRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Page<Post> LikesPost(Long userId, int page, int size) {
+    public Page<Post> LikesPost(Long userId, Pageable pageable) {
 
         QPost post = QPost.post;
         QLike like = QLike.like;
-        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
-        Pageable pageable = PageRequest.of(page-1, size, sort);
 
         List<Post> postList = jpaQueryFactory
                 .selectFrom(post)
@@ -55,13 +53,10 @@ public class LikeRepositoryImpl implements LikeRepositoryCustom {
     }
 
     @Override
-    public Page<PublicPost> LikesPubPost(Long userId, int page, int size) {
+    public Page<PublicPost> LikesPubPost(Long userId, Pageable pageable) {
 
         QPublicPost post = QPublicPost.publicPost;
         QLike like = QLike.like;
-        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
-        Pageable pageable = PageRequest.of(page-1, size, sort);
-
         List<PublicPost> postList = jpaQueryFactory
                 .selectFrom(post)
                 .leftJoin(like).on(post.id.eq(like.publicPost.id))
@@ -88,11 +83,9 @@ public class LikeRepositoryImpl implements LikeRepositoryCustom {
     }
 
     @Override
-    public Page<Comment> LikesComment(Long userId, int page, int size) {
+    public Page<Comment> LikesComment(Long userId, Pageable pageable) {
         QComment comment = QComment.comment;
         QLike like = QLike.like;
-        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
-        Pageable pageable = PageRequest.of(page-1, size, sort);
 
         List<Comment> commentList = jpaQueryFactory
                 .selectFrom(comment)
@@ -126,6 +119,9 @@ public class LikeRepositoryImpl implements LikeRepositoryCustom {
                 .where(like.post.id.eq(postId)
                         .and(like.contentType.eq(LikeEnum.POST)))
                 .fetchOne();
+        if(count == null){
+            count = 0L;
+        }
         return count.intValue();
     }
 
@@ -137,6 +133,9 @@ public class LikeRepositoryImpl implements LikeRepositoryCustom {
                 .where(like.publicPost.id.eq(postId)
                         .and(like.contentType.eq(LikeEnum.PUBPOST)))
                 .fetchOne();
+        if(count == null){
+            count = 0L;
+        }
         return count.intValue();
     }
 
@@ -148,6 +147,9 @@ public class LikeRepositoryImpl implements LikeRepositoryCustom {
                 .where(like.comment.id.eq(commentId)
                         .and(like.contentType.eq(LikeEnum.COMMENT)))
                 .fetchOne();
+        if(count == null){
+            count = 0L;
+        }
         return count.intValue();
     }
 
@@ -164,6 +166,9 @@ public class LikeRepositoryImpl implements LikeRepositoryCustom {
                 .where(like.user.userSeq.eq(userId)
                         .and(like.contentType.eq(type)))
                 .fetchOne();
+        if(count == null){
+            count = 0L;
+        }
         return count.intValue();
     }
 

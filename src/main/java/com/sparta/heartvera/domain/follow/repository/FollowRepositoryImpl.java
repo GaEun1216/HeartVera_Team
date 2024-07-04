@@ -19,7 +19,7 @@ public class FollowRepositoryImpl implements FollowRepositoryCustom{
 
 
     @Override
-    public Page<PublicPost> getFollowerPostsByUserId(Long followerUserId, int page, int size, String sortBy) {
+    public Page<PublicPost> getFollowerPostsByUserId(Long followerUserId, Pageable pageable, String sortBy) {
         /*
         SELECT pp.* FROM public_post AS pp
          LEFT JOIN FOLLOW AS f ON (pp.user_id = f.to_user)
@@ -33,7 +33,6 @@ public class FollowRepositoryImpl implements FollowRepositoryCustom{
         } else {
             orderSpecifier = post.createdAt.desc();
         }
-        Pageable pageable = PageRequest.of(page-1, size);
 
         List<PublicPost> postList = jpaQueryFactory
                 .selectFrom(post)
