@@ -97,6 +97,11 @@ public class PublicPostService {
   }
 
 
+  public Page<PublicPostResponseDto> getFollowedPubPosts(User user, int page, int size, String sortBy){
+    Page<PublicPost> postList = followRepository.getFollowerPostsByUserId(user.getUserSeq(), page, size, sortBy);
+    return postList.map(PublicPostResponseDto::new);
+  }
+
   // 좋아요 증감 함수
   @Transactional
   public void increasePostLike(Long postId){

@@ -1,6 +1,5 @@
 package com.sparta.heartvera.domain.like.repository;
 
-import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sparta.heartvera.domain.comment.entity.Comment;
 import com.sparta.heartvera.domain.comment.entity.QComment;
@@ -28,11 +27,11 @@ public class LikeRepositoryImpl implements LikeRepositoryCustom {
         QPost post = QPost.post;
         QLike like = QLike.like;
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
-        Pageable pageable = PageRequest.of(page-1, size);
+        Pageable pageable = PageRequest.of(page-1, size, sort);
 
         List<Post> postList = jpaQueryFactory
                 .selectFrom(post)
-                .leftJoin(like).on(post.id.eq(like.post.id)).fetchJoin()
+                .leftJoin(like).on(post.id.eq(like.post.id))
                 .where(like.user.userSeq.eq(userId)
                         .and(like.contentType.eq(LikeEnum.POST)))
                 .orderBy(post.createdAt.desc())
@@ -43,7 +42,7 @@ public class LikeRepositoryImpl implements LikeRepositoryCustom {
         Long total = jpaQueryFactory
                 .select(post.count())
                 .from(post)
-                .leftJoin(like).on(post.id.eq(like.publicPost.id)).fetchJoin()
+                .leftJoin(like).on(post.id.eq(like.publicPost.id))
                 .where(like.user.userSeq.eq(userId)
                         .and(like.contentType.eq(LikeEnum.POST)))
                 .fetchOne();
@@ -60,11 +59,12 @@ public class LikeRepositoryImpl implements LikeRepositoryCustom {
 
         QPublicPost post = QPublicPost.publicPost;
         QLike like = QLike.like;
-        Pageable pageable = PageRequest.of(page-1, size);
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        Pageable pageable = PageRequest.of(page-1, size, sort);
 
         List<PublicPost> postList = jpaQueryFactory
                 .selectFrom(post)
-                .leftJoin(like).on(post.id.eq(like.publicPost.id)).fetchJoin()
+                .leftJoin(like).on(post.id.eq(like.publicPost.id))
                 .where(like.user.userSeq.eq(userId)
                         .and(like.contentType.eq(LikeEnum.PUBPOST)))
                 .orderBy(post.createdAt.desc())
@@ -75,7 +75,7 @@ public class LikeRepositoryImpl implements LikeRepositoryCustom {
         Long total = jpaQueryFactory
                 .select(post.count())
                 .from(post)
-                .leftJoin(like).on(post.id.eq(like.publicPost.id)).fetchJoin()
+                .leftJoin(like).on(post.id.eq(like.publicPost.id))
                 .where(like.user.userSeq.eq(userId)
                         .and(like.contentType.eq(LikeEnum.PUBPOST)))
                 .fetchOne();
@@ -96,7 +96,7 @@ public class LikeRepositoryImpl implements LikeRepositoryCustom {
 
         List<Comment> commentList = jpaQueryFactory
                 .selectFrom(comment)
-                .leftJoin(like).on(comment.id.eq(like.comment.id)).fetchJoin()
+                .leftJoin(like).on(comment.id.eq(like.comment.id))
                 .where(like.user.userSeq.eq(userId)
                         .and(like.contentType.eq(LikeEnum.COMMENT)))
                 .orderBy(comment.createdAt.desc())
@@ -107,7 +107,7 @@ public class LikeRepositoryImpl implements LikeRepositoryCustom {
         Long total = jpaQueryFactory
                 .select(comment.count())
                 .from(comment)
-                .leftJoin(like).on(comment.id.eq(like.comment.id)).fetchJoin()
+                .leftJoin(like).on(comment.id.eq(like.comment.id))
                 .where(like.user.userSeq.eq(userId)
                         .and(like.contentType.eq(LikeEnum.COMMENT)))
                 .fetchOne();
@@ -166,7 +166,5 @@ public class LikeRepositoryImpl implements LikeRepositoryCustom {
                 .fetchOne();
         return count.intValue();
     }
-
-
 
 }
