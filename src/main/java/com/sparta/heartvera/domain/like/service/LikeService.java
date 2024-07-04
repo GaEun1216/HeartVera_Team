@@ -91,19 +91,18 @@ public class LikeService {
         }
     }
 
-    public List<PostResponseDto> getLikedPostsByUser(User user, int page, int size) {
-        List<Post> postList = likeRepository.LikesPost(user.getUserSeq(), page, size);
-        //return postList.map(PostResponseDto::new);
-        return postList.stream().map(PostResponseDto::new).toList();
+    public Page<PostResponseDto> getLikedPostsByUser(User user, int page, int size) {
+        Page<Post> postList = likeRepository.LikesPost(user.getUserSeq(), page, size);
+        return postList.map(PostResponseDto::new);
     }
 
-    public List<PublicPostResponseDto> getLikedPubPostsByUser(User user, int page, int size) {
-        List<PublicPost> postList = likeRepository.LikesPubPost(user.getUserSeq(), page, size);
-        return postList.stream().map(PublicPostResponseDto::new).toList();
+    public Page<PublicPostResponseDto> getLikedPubPostsByUser(User user, int page, int size) {
+        Page<PublicPost> postList = likeRepository.LikesPubPost(user.getUserSeq(), page, size);
+        return postList.map(PublicPostResponseDto::new);
     }
 
-    public List<CommentResponseDto> getLikedCommentsByUser(User user, int page, int size) {
-        List<Comment> commentList = likeRepository.LikesComment(user.getUserSeq(), page, size);
-        return commentList.stream().map(CommentResponseDto::new).toList();
+    public Page<CommentResponseDto> getLikedCommentsByUser(User user, int page, int size) {
+        Page<Comment> commentList = likeRepository.LikesComment(user.getUserSeq(), page, size);
+        return commentList.map(CommentResponseDto::new);
     }
 }

@@ -92,6 +92,6 @@ public class LikeServiceTest {
         //likeService.togglePostLike(user1, post1.getId());
 
         // Then
-        assertEquals(1, likeRepository.GetPostLikesCount(post1.getId()));
+        assertEquals(1, post1.getLikeCount());
     }
 }

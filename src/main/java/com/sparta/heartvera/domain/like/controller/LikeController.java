@@ -50,7 +50,7 @@ public class LikeController {
     // 내가 좋아요 누른 게시글 확인
     @Operation(summary = "내가 좋아요 누른 게시글 목록",description = "내가 좋아요 누른 게시글의 목록을 확인합니다.")
     @GetMapping("/posts/like")
-    public ResponseEntity<List<PostResponseDto>> getLikedPosts(@AuthenticationPrincipal UserDetailsImpl userDetails,
+    public ResponseEntity<Page<PostResponseDto>> getLikedPosts(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                                @RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "size", defaultValue = "5") int size) {
         return ResponseEntity.status(HttpStatus.OK).body(
                 likeService.getLikedPostsByUser(userDetails.getUser(),page,size));
@@ -59,7 +59,7 @@ public class LikeController {
     // 내가 좋아요 누른 공개게시글 확인
     @Operation(summary = "내가 좋아요 누른 공개 게시글 목록",description = "내가 좋아요 누른 공개 게시글의 목록을 확인합니다.")
     @GetMapping("/pubposts/like")
-    public ResponseEntity<List<PublicPostResponseDto>> getLikedPubPosts(@AuthenticationPrincipal UserDetailsImpl userDetails,
+    public ResponseEntity<Page<PublicPostResponseDto>> getLikedPubPosts(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                                         @RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "size", defaultValue = "5") int size) {
         return ResponseEntity.status(HttpStatus.OK).body(
                 likeService.getLikedPubPostsByUser(userDetails.getUser(),page,size));
@@ -69,7 +69,7 @@ public class LikeController {
     // 내가 좋아요 누른 댓글 확인
     @Operation(summary = "내가 좋아요 누른 댓글 목록",description = "내가 좋아요 누른 댓글의 목록을 확인합니다.")
     @GetMapping("/comments/like")
-    public ResponseEntity<List<CommentResponseDto>> getLikedComments(@AuthenticationPrincipal UserDetailsImpl userDetails,
+    public ResponseEntity<Page<CommentResponseDto>> getLikedComments(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                                      @RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "size", defaultValue = "5") int size) {
         return ResponseEntity.status(HttpStatus.OK).body(
                 likeService.getLikedCommentsByUser(userDetails.getUser(),page,size));

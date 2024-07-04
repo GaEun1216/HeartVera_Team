@@ -31,6 +31,8 @@ public class QComment extends EntityPathBase<Comment> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final NumberPath<Integer> likeCount = createNumber("likeCount", Integer.class);
+
     public final ListPath<com.sparta.heartvera.domain.like.entity.Like, com.sparta.heartvera.domain.like.entity.QLike> likes = this.<com.sparta.heartvera.domain.like.entity.Like, com.sparta.heartvera.domain.like.entity.QLike>createList("likes", com.sparta.heartvera.domain.like.entity.Like.class, com.sparta.heartvera.domain.like.entity.QLike.class, PathInits.DIRECT2);
 
     //inherited
