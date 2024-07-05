@@ -1,6 +1,5 @@
 package com.sparta.heartvera.domain.post.dto;
 
-import com.sparta.heartvera.domain.post.entity.Post;
 import com.sparta.heartvera.domain.post.entity.PublicPost;
 import lombok.Getter;
 

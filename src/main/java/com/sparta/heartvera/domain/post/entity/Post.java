@@ -42,6 +42,16 @@ public class Post extends Timestamped {
     private List<Like> likes;
 
     @Builder
+    public Post(Long id,String title, String content, User user) {
+        this.id = id;
+        this.title = title;
+        this.content = content;
+        this.user = user;
+        this.comments = new ArrayList<>();
+        this.likes = new ArrayList<>();
+        this.likeCount = 0;
+    }
+
     public Post(String title, String content, User user) {
         this.title = title;
         this.content = content;

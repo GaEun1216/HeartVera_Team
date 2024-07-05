@@ -38,7 +38,8 @@ public class PublicPost extends Timestamped {
     private List<Like> likes;
 
     @Builder
-    public PublicPost(String content, User user){
+    public PublicPost(Long id, String content, User user){
+        this.id = id;
         this.user = user;
         this.content = content;
         this.likes = new ArrayList<>();

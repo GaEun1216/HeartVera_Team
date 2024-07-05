@@ -13,19 +13,21 @@ import com.sparta.heartvera.domain.post.repository.PublicPostRepository;
 import com.sparta.heartvera.domain.post.service.PostService;
 import com.sparta.heartvera.domain.user.entity.User;
 import com.sparta.heartvera.domain.user.repository.UserRepository;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
+@ActiveProfiles("test")
 @SpringBootTest
 public class LikeServiceTest {
 
@@ -75,8 +77,11 @@ public class LikeServiceTest {
         post1 = new Post("title","content", user2);
         //post2 = new Post("title","content", user1);
         postRepository.save(post1);
-        //postRepository.save(post2);
-        publicPost = new PublicPost("content", user1);
+        postRepository.save(post2);
+        publicPost = PublicPost.builder()
+                .user(user2)
+                .content("content")
+                .build();
     }
 
     @Test

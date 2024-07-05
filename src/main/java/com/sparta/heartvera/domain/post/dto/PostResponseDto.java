@@ -20,4 +20,16 @@ public class PostResponseDto {
         this.modifiedAt = post.getModifiedAt();
         this.likeCount = post.getLikeCount();
     }
+
+
+    public boolean equals(PostResponseDto response){
+        if(response != null){
+            return  this.title == response.title &&
+                    this.content == response.content &&
+                    this.likeCount == response.likeCount;
+        }
+        else {
+            return false;
+        }
+    }
 }
