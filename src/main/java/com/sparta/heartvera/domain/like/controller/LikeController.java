@@ -59,7 +59,7 @@ public class LikeController {
     public ResponseEntity<Page<PostResponseDto>> getLikedPosts(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                                @RequestParam(value = "page", defaultValue = "1") int page,
                                                                @RequestParam(value = "size", defaultValue = "5") int size) {
-        Pageable pageable = PageRequest.of(page-1, size);
+        Pageable pageable = PageRequest.of(page - 1, size);
         return ResponseEntity.status(HttpStatus.OK).body(
                 likeService.getLikedPostsByUser(userDetails.getUser(),pageable));
     }
@@ -70,7 +70,7 @@ public class LikeController {
     public ResponseEntity<Page<PublicPostResponseDto>> getLikedPubPosts(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                                         @RequestParam(value = "page", defaultValue = "1") int page,
                                                                         @RequestParam(value = "size", defaultValue = "5") int size) {
-        Pageable pageable = PageRequest.of(page-1, size);
+        Pageable pageable = PageRequest.of(page - 1, size);
         return ResponseEntity.status(HttpStatus.OK).body(
                 likeService.getLikedPubPostsByUser(userDetails.getUser(),pageable));
     }
@@ -82,7 +82,7 @@ public class LikeController {
     public ResponseEntity<Page<CommentResponseDto>> getLikedComments(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                                      @RequestParam(value = "page", defaultValue = "1") int page,
                                                                      @RequestParam(value = "size", defaultValue = "5") int size) {
-        Pageable pageable = PageRequest.of(page-1, size);
+        Pageable pageable = PageRequest.of(page - 1, size);
         return ResponseEntity.status(HttpStatus.OK).body(
                 likeService.getLikedCommentsByUser(userDetails.getUser(),pageable));
     }

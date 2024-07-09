@@ -71,7 +71,7 @@ public class PublicPostController {
             @RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(value = "size", defaultValue = "5") int size,
             @RequestParam(value = "sortBy", defaultValue = "createAt") String sortBy) {
-        Pageable pageable = PageRequest.of(page-1, size);
+        Pageable pageable = PageRequest.of(page - 1, size);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(postService.getFollowedPubPosts(userDetails.getUser(), pageable, sortBy));
     }
