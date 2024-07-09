@@ -6,7 +6,9 @@ import com.sparta.heartvera.domain.follow.entity.QFollow;
 import com.sparta.heartvera.domain.post.entity.PublicPost;
 import com.sparta.heartvera.domain.post.entity.QPublicPost;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -36,7 +38,7 @@ public class FollowRepositoryImpl implements FollowRepositoryCustom{
 
         List<PublicPost> postList = jpaQueryFactory
                 .selectFrom(post)
-                .leftJoin(follow).on(post.user.userId.eq(follow.toUser.userId))
+                .innerJoin(follow).on(post.user.userId.eq(follow.toUser.userId))
                 .where(follow.fromUser.userSeq.eq(followerUserId))
                 .orderBy(orderSpecifier)
                 .offset(pageable.getOffset())
@@ -46,7 +48,7 @@ public class FollowRepositoryImpl implements FollowRepositoryCustom{
         Long total = jpaQueryFactory
                 .select(post.count())
                 .from(post)
-                .leftJoin(follow).on(post.user.userId.eq(follow.toUser.userId))
+                .innerJoin(follow).on(post.user.userId.eq(follow.toUser.userId))
                 .where(follow.fromUser.userSeq.eq(followerUserId))
                 .fetchOne();
 
